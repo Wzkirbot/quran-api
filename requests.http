@@ -1,0 +1,78 @@
+### Base URL Variable
+@baseUrl = http://localhost:3000
+
+### 1. Root Discovery & Metadata
+GET {{baseUrl}}/
+Accept: application/json
+
+### 2. Health Liveness Probe
+GET {{baseUrl}}/health
+Accept: application/json
+
+### 3. Readiness Probe (DB & Cache Status)
+GET {{baseUrl}}/ready
+Accept: application/json
+
+### 4. API Version & Checksum Manifests
+GET {{baseUrl}}/version
+Accept: application/json
+
+### 5. List All 114 Surahs
+GET {{baseUrl}}/v1/surahs
+Accept: application/json
+
+### 6. Get Surah Details (Surah Al-Fatihah, ID: 1)
+GET {{baseUrl}}/v1/surahs/1
+Accept: application/json
+
+### 7. Get Paginated Ayahs of a Surah
+GET {{baseUrl}}/v1/surahs/1/ayahs?page=1&limit=10
+Accept: application/json
+
+### 8. Get Ayah by Reference (Ayat Al-Kursi, 2:255)
+GET {{baseUrl}}/v1/ayahs/2:255
+Accept: application/json
+
+### 9. Get Random Ayah
+GET {{baseUrl}}/v1/ayahs/random
+Accept: application/json
+
+### 10. Arabic Text Search
+GET {{baseUrl}}/v1/search?q=الصلاة&limit=10
+Accept: application/json
+
+### 11. List All 30 Juz
+GET {{baseUrl}}/v1/juz
+Accept: application/json
+
+### 12. Get Ayahs of Juz 1
+GET {{baseUrl}}/v1/juz/1
+Accept: application/json
+
+### 13. Get Ayahs on Madinah Mushaf Page 1
+GET {{baseUrl}}/v1/pages/1
+Accept: application/json
+
+### 14. List Adhkar Categories
+GET {{baseUrl}}/v1/adhkar/categories
+Accept: application/json
+
+### 15. Get Morning Adhkar
+GET {{baseUrl}}/v1/adhkar/category/morning
+Accept: application/json
+
+### 16. Get Quranic and Prophetic Duas
+GET {{baseUrl}}/v1/adhkar/duas
+Accept: application/json
+
+### 17. Get Al-Muyassar Tafsir (1:1)
+GET {{baseUrl}}/v1/tafsir/1/1
+Accept: application/json
+
+### 18. Get Saheeh International English Translation (1:1)
+GET {{baseUrl}}/v1/translations/1/1?lang=en
+Accept: application/json
+
+### 19. List Verified Audio Reciters
+GET {{baseUrl}}/v1/reciters
+Accept: application/json

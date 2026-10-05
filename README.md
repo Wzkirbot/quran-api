@@ -97,7 +97,7 @@ Start the complete stack (API + PostgreSQL + Redis) in 30 seconds:
 
 ```bash
 # 1. Clone the repository
-git clone https://github.com/USERNAME/quran-api.git
+git clone https://github.com/Wzkirbot/quran-api.git
 cd quran-api
 
 # 2. Copy the environment variables

@@ -16,7 +16,7 @@ Thank you for your interest in contributing to **Quran API**! This project is 10
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/USERNAME/quran-api.git
+   git clone https://github.com/Wzkirbot/quran-api.git
    cd quran-api
    ```
 
