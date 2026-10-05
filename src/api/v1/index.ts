@@ -16,5 +16,9 @@ v1Router.use('/juz', juzRouter);
 v1Router.use('/pages', pagesRouter);
 v1Router.use('/search', searchRouter);
 v1Router.use('/adhkar', adhkarRouter);
+v1Router.use('/duas', (req, res, next) => {
+  req.url = '/duas' + (req.url === '/' ? '' : req.url);
+  adhkarRouter(req, res, next);
+});
 v1Router.use('/', tafsirRouter);
 v1Router.use('/', systemRouter);

@@ -21,7 +21,8 @@ class TranslationService {
   }
 
   public async getTranslation(surahId: number, ayahNumber: number, lang = 'en'): Promise<TranslationItem | null> {
-    const cacheKey = `trans:${lang}:${surahId}:${ayahNumber}`;
+    const cleanLang = lang.startsWith('en') ? 'en' : lang;
+    const cacheKey = `trans:${cleanLang}:${surahId}:${ayahNumber}`;
     const cached = await cache.get<TranslationItem>(cacheKey);
     if (cached) return cached;
 
@@ -31,17 +32,45 @@ class TranslationService {
       try {
         const q = await db.query<TranslationItem>(
           'SELECT surah_id, ayah_number, language_code, author_name, content FROM translations WHERE surah_id = $1 AND ayah_number = $2 AND language_code = $3',
-          [surahId, ayahNumber, lang]
+          [surahId, ayahNumber, cleanLang]
         );
         if (q.rows.length > 0) res = q.rows[0];
       } catch {}
     }
 
     if (!res) {
-      res = this.translations.find((t) => t.surah_id === surahId && t.ayah_number === ayahNumber && t.language_code === lang) || null;
+      res = this.translations.find((t) => t.surah_id === surahId && t.ayah_number === ayahNumber && t.language_code === cleanLang) || null;
     }
 
     if (res) {
+      await cache.set(cacheKey, res, 86400);
+    }
+    return res;
+  }
+
+  public async getSurahTranslation(surahId: number, lang = 'en'): Promise<TranslationItem[]> {
+    const cleanLang = lang.startsWith('en') ? 'en' : lang;
+    const cacheKey = `trans:${cleanLang}:surah:${surahId}`;
+    const cached = await cache.get<TranslationItem[]>(cacheKey);
+    if (cached) return cached;
+
+    let res: TranslationItem[] = [];
+
+    if (db.getStatus().connected) {
+      try {
+        const q = await db.query<TranslationItem>(
+          'SELECT surah_id, ayah_number, language_code, author_name, content FROM translations WHERE surah_id = $1 AND language_code = $2 ORDER BY ayah_number ASC',
+          [surahId, cleanLang]
+        );
+        res = q.rows;
+      } catch {}
+    }
+
+    if (res.length === 0) {
+      res = this.translations.filter((t) => t.surah_id === surahId && t.language_code === cleanLang);
+    }
+
+    if (res.length > 0) {
       await cache.set(cacheKey, res, 86400);
     }
     return res;

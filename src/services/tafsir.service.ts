@@ -21,7 +21,8 @@ class TafsirService {
   }
 
   public async getTafsir(surahId: number, ayahNumber: number, tafsirName = 'muyassar'): Promise<TafsirItem | null> {
-    const cacheKey = `tafsir:${tafsirName}:${surahId}:${ayahNumber}`;
+    const cleanName = tafsirName.replace(/^ar\./, '');
+    const cacheKey = `tafsir:${cleanName}:${surahId}:${ayahNumber}`;
     const cached = await cache.get<TafsirItem>(cacheKey);
     if (cached) return cached;
 
@@ -30,18 +31,46 @@ class TafsirService {
     if (db.getStatus().connected) {
       try {
         const q = await db.query<TafsirItem>(
-          'SELECT surah_id, ayah_number, tafsir_name, content FROM tafsirs WHERE surah_id = $1 AND ayah_number = $2 AND tafsir_name = $3',
-          [surahId, ayahNumber, tafsirName]
+          'SELECT surah_id, ayah_number, tafsir_name, content FROM tafsirs WHERE surah_id = $1 AND ayah_number = $2 AND (tafsir_name = $3 OR tafsir_name = $4)',
+          [surahId, ayahNumber, cleanName, tafsirName]
         );
         if (q.rows.length > 0) res = q.rows[0];
       } catch {}
     }
 
     if (!res) {
-      res = this.tafsirs.find((t) => t.surah_id === surahId && t.ayah_number === ayahNumber && t.tafsir_name === tafsirName) || null;
+      res = this.tafsirs.find((t) => t.surah_id === surahId && t.ayah_number === ayahNumber && (t.tafsir_name === cleanName || t.tafsir_name === tafsirName)) || null;
     }
 
     if (res) {
+      await cache.set(cacheKey, res, 86400);
+    }
+    return res;
+  }
+
+  public async getSurahTafsir(surahId: number, tafsirName = 'muyassar'): Promise<TafsirItem[]> {
+    const cleanName = tafsirName.replace(/^ar\./, '');
+    const cacheKey = `tafsir:${cleanName}:surah:${surahId}`;
+    const cached = await cache.get<TafsirItem[]>(cacheKey);
+    if (cached) return cached;
+
+    let res: TafsirItem[] = [];
+
+    if (db.getStatus().connected) {
+      try {
+        const q = await db.query<TafsirItem>(
+          'SELECT surah_id, ayah_number, tafsir_name, content FROM tafsirs WHERE surah_id = $1 AND (tafsir_name = $2 OR tafsir_name = $3) ORDER BY ayah_number ASC',
+          [surahId, cleanName, tafsirName]
+        );
+        res = q.rows;
+      } catch {}
+    }
+
+    if (res.length === 0) {
+      res = this.tafsirs.filter((t) => t.surah_id === surahId && (t.tafsir_name === cleanName || t.tafsir_name === tafsirName));
+    }
+
+    if (res.length > 0) {
       await cache.set(cacheKey, res, 86400);
     }
     return res;
