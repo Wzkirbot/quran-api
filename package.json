@@ -1,8 +1,20 @@
 {
-  "name": "quran-api",
+  "name": "@wzkirbot/quran-api",
   "version": "1.0.0",
   "description": "Free, Open Source & Self-Hosted Quran, Adhkar and Islamic REST API for developers with Zero External Runtime Dependency.",
-  "main": "dist/src/server.js",
+  "main": "dist/src/index.js",
+  "types": "dist/src/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Wzkirbot/quran-api.git"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  },
+  "files": [
+    "dist",
+    "data"
+  ],
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
