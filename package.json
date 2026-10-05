@@ -2,11 +2,11 @@
   "name": "quran-api",
   "version": "1.0.0",
   "description": "Free, Open Source & Self-Hosted Quran, Adhkar and Islamic REST API for developers with Zero External Runtime Dependency.",
-  "main": "dist/server.js",
+  "main": "dist/src/server.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc",
-    "start": "node dist/server.js",
+    "start": "node dist/src/server.js",
     "validate:data": "tsx scripts/validate-data.ts",
     "db:migrate": "tsx scripts/db-migrate.ts",
     "db:seed": "tsx scripts/importers/ingest.ts",

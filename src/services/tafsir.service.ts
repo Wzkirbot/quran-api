@@ -6,16 +6,49 @@ import { cache } from '../cache/cache.service.js';
 
 class TafsirService {
   private tafsirs: TafsirItem[] = [];
+  private tafsirByAyah = new Map<string, TafsirItem>();
+  private tafsirBySurah = new Map<string, TafsirItem[]>();
 
   constructor() {
     this.loadLocal();
   }
 
+  private resolveDataPath(relPath: string): string {
+    const candidates = [
+      path.resolve(process.cwd(), 'data', relPath),
+      path.resolve(process.cwd(), '../data', relPath),
+      path.resolve(process.cwd(), '../../data', relPath),
+      path.resolve(process.cwd(), relPath)
+    ];
+
+    for (const p of candidates) {
+      if (fs.existsSync(p)) return p;
+    }
+    return path.resolve(process.cwd(), 'data', relPath);
+  }
+
   private loadLocal(): void {
     try {
-      const p = path.resolve(process.cwd(), 'data/tafsir/ar.muyassar.json');
+      const p = this.resolveDataPath('tafsir/ar.muyassar.json');
       if (fs.existsSync(p)) {
         this.tafsirs = JSON.parse(fs.readFileSync(p, 'utf-8'));
+
+        this.tafsirByAyah.clear();
+        this.tafsirBySurah.clear();
+
+        for (const item of this.tafsirs) {
+          const cleanName = item.tafsir_name.replace(/^ar\./, '');
+          const ayahKey = `${cleanName}:${item.surah_id}:${item.ayah_number}`;
+          this.tafsirByAyah.set(ayahKey, item);
+
+          const surahKey = `${cleanName}:${item.surah_id}`;
+          let list = this.tafsirBySurah.get(surahKey);
+          if (!list) {
+            list = [];
+            this.tafsirBySurah.set(surahKey, list);
+          }
+          list.push(item);
+        }
       }
     } catch {}
   }
@@ -39,7 +72,7 @@ class TafsirService {
     }
 
     if (!res) {
-      res = this.tafsirs.find((t) => t.surah_id === surahId && t.ayah_number === ayahNumber && (t.tafsir_name === cleanName || t.tafsir_name === tafsirName)) || null;
+      res = this.tafsirByAyah.get(`${cleanName}:${surahId}:${ayahNumber}`) || null;
     }
 
     if (res) {
@@ -67,7 +100,7 @@ class TafsirService {
     }
 
     if (res.length === 0) {
-      res = this.tafsirs.filter((t) => t.surah_id === surahId && (t.tafsir_name === cleanName || t.tafsir_name === tafsirName));
+      res = this.tafsirBySurah.get(`${cleanName}:${surahId}`) || [];
     }
 
     if (res.length > 0) {

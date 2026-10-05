@@ -102,6 +102,15 @@ class CacheService {
       memoryEntries: this.memoryCache.size
     };
   }
+
+  public async close(): Promise<void> {
+    if (this.redisClient) {
+      try {
+        await this.redisClient.quit();
+      } catch {}
+      this.isRedisConnected = false;
+    }
+  }
 }
 
 export const cache = new CacheService();

@@ -6,16 +6,49 @@ import { cache } from '../cache/cache.service.js';
 
 class TranslationService {
   private translations: TranslationItem[] = [];
+  private translationByAyah = new Map<string, TranslationItem>();
+  private translationBySurah = new Map<string, TranslationItem[]>();
 
   constructor() {
     this.loadLocal();
   }
 
+  private resolveDataPath(relPath: string): string {
+    const candidates = [
+      path.resolve(process.cwd(), 'data', relPath),
+      path.resolve(process.cwd(), '../data', relPath),
+      path.resolve(process.cwd(), '../../data', relPath),
+      path.resolve(process.cwd(), relPath)
+    ];
+
+    for (const p of candidates) {
+      if (fs.existsSync(p)) return p;
+    }
+    return path.resolve(process.cwd(), 'data', relPath);
+  }
+
   private loadLocal(): void {
     try {
-      const p = path.resolve(process.cwd(), 'data/translations/en.saheeh.json');
+      const p = this.resolveDataPath('translations/en.saheeh.json');
       if (fs.existsSync(p)) {
         this.translations = JSON.parse(fs.readFileSync(p, 'utf-8'));
+
+        this.translationByAyah.clear();
+        this.translationBySurah.clear();
+
+        for (const item of this.translations) {
+          const cleanLang = item.language_code.startsWith('en') ? 'en' : item.language_code;
+          const ayahKey = `${cleanLang}:${item.surah_id}:${item.ayah_number}`;
+          this.translationByAyah.set(ayahKey, item);
+
+          const surahKey = `${cleanLang}:${item.surah_id}`;
+          let list = this.translationBySurah.get(surahKey);
+          if (!list) {
+            list = [];
+            this.translationBySurah.set(surahKey, list);
+          }
+          list.push(item);
+        }
       }
     } catch {}
   }
@@ -39,7 +72,7 @@ class TranslationService {
     }
 
     if (!res) {
-      res = this.translations.find((t) => t.surah_id === surahId && t.ayah_number === ayahNumber && t.language_code === cleanLang) || null;
+      res = this.translationByAyah.get(`${cleanLang}:${surahId}:${ayahNumber}`) || null;
     }
 
     if (res) {
@@ -67,7 +100,7 @@ class TranslationService {
     }
 
     if (res.length === 0) {
-      res = this.translations.filter((t) => t.surah_id === surahId && t.language_code === cleanLang);
+      res = this.translationBySurah.get(`${cleanLang}:${surahId}`) || [];
     }
 
     if (res.length > 0) {

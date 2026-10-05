@@ -15,17 +15,38 @@ class QuranService {
   private pagesList: PageMetadata[] = [];
   private isDataLoaded = false;
 
+  // High-performance O(1) in-memory index maps
+  private surahMap = new Map<number, Surah>();
+  private ayahsByGlobal = new Map<number, Ayah>();
+  private ayahsBySurahAyah = new Map<string, Ayah>();
+  private ayahsBySurah = new Map<number, Ayah[]>();
+  private ayahsByPage = new Map<number, Ayah[]>();
+  private ayahsByJuz = new Map<number, Ayah[]>();
+
   constructor() {
     this.loadLocalDatasets();
   }
 
+  private resolveDataPath(relPath: string): string {
+    const candidates = [
+      path.resolve(process.cwd(), 'data', relPath),
+      path.resolve(process.cwd(), '../data', relPath),
+      path.resolve(process.cwd(), '../../data', relPath),
+      path.resolve(process.cwd(), relPath)
+    ];
+
+    for (const p of candidates) {
+      if (fs.existsSync(p)) return p;
+    }
+    return path.resolve(process.cwd(), 'data', relPath);
+  }
+
   private loadLocalDatasets(): void {
     try {
-      const dataDir = path.resolve(process.cwd(), 'data');
-      const surahsPath = path.join(dataDir, 'quran/surahs.json');
-      const ayahsPath = path.join(dataDir, 'quran/ayahs.json');
-      const juzPath = path.join(dataDir, 'metadata/juz.json');
-      const pagesPath = path.join(dataDir, 'metadata/pages.json');
+      const surahsPath = this.resolveDataPath('quran/surahs.json');
+      const ayahsPath = this.resolveDataPath('quran/ayahs.json');
+      const juzPath = this.resolveDataPath('metadata/juz.json');
+      const pagesPath = this.resolveDataPath('metadata/pages.json');
 
       if (fs.existsSync(surahsPath)) {
         this.surahs = JSON.parse(fs.readFileSync(surahsPath, 'utf-8'));
@@ -40,8 +61,46 @@ class QuranService {
         this.pagesList = JSON.parse(fs.readFileSync(pagesPath, 'utf-8'));
       }
 
+      // Build O(1) index maps
+      this.surahMap.clear();
+      for (const s of this.surahs) {
+        this.surahMap.set(s.id, s);
+      }
+
+      this.ayahsByGlobal.clear();
+      this.ayahsBySurahAyah.clear();
+      this.ayahsBySurah.clear();
+      this.ayahsByPage.clear();
+      this.ayahsByJuz.clear();
+
+      for (const a of this.ayahs) {
+        this.ayahsByGlobal.set(a.global_number, a);
+        this.ayahsBySurahAyah.set(`${a.surah_id}:${a.ayah_number}`, a);
+
+        let surahList = this.ayahsBySurah.get(a.surah_id);
+        if (!surahList) {
+          surahList = [];
+          this.ayahsBySurah.set(a.surah_id, surahList);
+        }
+        surahList.push(a);
+
+        let pageList = this.ayahsByPage.get(a.page);
+        if (!pageList) {
+          pageList = [];
+          this.ayahsByPage.set(a.page, pageList);
+        }
+        pageList.push(a);
+
+        let juzList = this.ayahsByJuz.get(a.juz);
+        if (!juzList) {
+          juzList = [];
+          this.ayahsByJuz.set(a.juz, juzList);
+        }
+        juzList.push(a);
+      }
+
       this.isDataLoaded = this.surahs.length === 114 && this.ayahs.length === 6236;
-      logger.info(`Loaded local Quran datasets: ${this.surahs.length} surahs, ${this.ayahs.length} ayahs.`);
+      logger.info(`Loaded local Quran datasets: ${this.surahs.length} surahs, ${this.ayahs.length} ayahs indexed.`);
     } catch (err: any) {
       logger.error(`Error loading local Quran datasets: ${err.message}`);
     }
@@ -100,7 +159,7 @@ class QuranService {
     }
 
     if (!surah) {
-      surah = this.surahs.find((s) => s.id === id) || null;
+      surah = this.surahMap.get(id) || null;
     }
 
     if (surah) {
@@ -147,7 +206,7 @@ class QuranService {
     }
 
     if (ayahsResult.length === 0) {
-      const allSurahAyahs = this.ayahs.filter((a) => a.surah_id === surahId);
+      const allSurahAyahs = this.ayahsBySurah.get(surahId) || [];
       total = allSurahAyahs.length;
       ayahsResult = allSurahAyahs.slice(offset, offset + safeLimit);
     }
@@ -191,9 +250,9 @@ class QuranService {
 
     if (!ayah) {
       if (parsed.globalNumber) {
-        ayah = this.ayahs.find((a) => a.global_number === parsed.globalNumber) || null;
+        ayah = this.ayahsByGlobal.get(parsed.globalNumber) || null;
       } else if (parsed.surahId && parsed.ayahNumber) {
-        ayah = this.ayahs.find((a) => a.surah_id === parsed.surahId && a.ayah_number === parsed.ayahNumber) || null;
+        ayah = this.ayahsBySurahAyah.get(`${parsed.surahId}:${parsed.ayahNumber}`) || null;
       }
     }
 
@@ -253,7 +312,7 @@ class QuranService {
     }
 
     if (ayahsResult.length === 0) {
-      const allJuzAyahs = this.ayahs.filter((a) => a.juz === juzId);
+      const allJuzAyahs = this.ayahsByJuz.get(juzId) || [];
       total = allJuzAyahs.length;
       ayahsResult = allJuzAyahs.slice(offset, offset + safeLimit);
     }
@@ -287,7 +346,7 @@ class QuranService {
     }
 
     if (ayahsResult.length === 0) {
-      ayahsResult = this.ayahs.filter((a) => a.page === pageNumber);
+      ayahsResult = this.ayahsByPage.get(pageNumber) || [];
     }
 
     const res = { page: pageNumber, ayahs: ayahsResult, total: ayahsResult.length };

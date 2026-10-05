@@ -11,16 +11,35 @@ class AdhkarService {
   private adhkar: AdhkarItem[] = [];
   private duas: DuaItem[] = [];
 
+  // O(1) Index Maps
+  private categoriesBySlug = new Map<string, AdhkarCategory>();
+  private categoriesById = new Map<number, AdhkarCategory>();
+  private adhkarByCatId = new Map<number, AdhkarItem[]>();
+  private duasByCategory = new Map<string, DuaItem[]>();
+
   constructor() {
     this.loadLocalDatasets();
   }
 
+  private resolveDataPath(relPath: string): string {
+    const candidates = [
+      path.resolve(process.cwd(), 'data', relPath),
+      path.resolve(process.cwd(), '../data', relPath),
+      path.resolve(process.cwd(), '../../data', relPath),
+      path.resolve(process.cwd(), relPath)
+    ];
+
+    for (const p of candidates) {
+      if (fs.existsSync(p)) return p;
+    }
+    return path.resolve(process.cwd(), 'data', relPath);
+  }
+
   private loadLocalDatasets(): void {
     try {
-      const dataDir = path.resolve(process.cwd(), 'data');
-      const categoriesPath = path.join(dataDir, 'adhkar/categories.json');
-      const adhkarPath = path.join(dataDir, 'adhkar/adhkar.json');
-      const duasPath = path.join(dataDir, 'dua/duas.json');
+      const categoriesPath = this.resolveDataPath('adhkar/categories.json');
+      const adhkarPath = this.resolveDataPath('adhkar/adhkar.json');
+      const duasPath = this.resolveDataPath('dua/duas.json');
 
       if (fs.existsSync(categoriesPath)) {
         this.categories = JSON.parse(fs.readFileSync(categoriesPath, 'utf-8'));
@@ -30,6 +49,34 @@ class AdhkarService {
       }
       if (fs.existsSync(duasPath)) {
         this.duas = JSON.parse(fs.readFileSync(duasPath, 'utf-8'));
+      }
+
+      this.categoriesBySlug.clear();
+      this.categoriesById.clear();
+      for (const c of this.categories) {
+        this.categoriesBySlug.set(c.slug.toLowerCase(), c);
+        this.categoriesById.set(c.id, c);
+      }
+
+      this.adhkarByCatId.clear();
+      for (const a of this.adhkar) {
+        let list = this.adhkarByCatId.get(a.category_id);
+        if (!list) {
+          list = [];
+          this.adhkarByCatId.set(a.category_id, list);
+        }
+        list.push(a);
+      }
+
+      this.duasByCategory.clear();
+      for (const d of this.duas) {
+        const cat = d.category.toLowerCase();
+        let list = this.duasByCategory.get(cat);
+        if (!list) {
+          list = [];
+          this.duasByCategory.set(cat, list);
+        }
+        list.push(d);
       }
 
       logger.info(`Loaded local Adhkar: ${this.categories.length} categories, ${this.adhkar.length} items, ${this.duas.length} duas.`);
@@ -63,17 +110,40 @@ class AdhkarService {
   }
 
   public async getCategoryBySlug(slug: string): Promise<AdhkarCategory | null> {
+    const s = slug.toLowerCase();
+    if (!db.getStatus().connected && this.categoriesBySlug.has(s)) {
+      return this.categoriesBySlug.get(s) || null;
+    }
     const categories = await this.getCategories();
-    return categories.find((c) => c.slug === slug.toLowerCase()) || null;
+    return categories.find((c) => c.slug.toLowerCase() === s) || null;
   }
 
   public async getAdhkarByCategory(
     categorySlugOrId: string | number
   ): Promise<{ category: AdhkarCategory; items: AdhkarItem[]; total: number }> {
-    const categories = await this.getCategories();
-    const category = categories.find((c) =>
-      typeof categorySlugOrId === 'number' ? c.id === categorySlugOrId : c.slug === String(categorySlugOrId).toLowerCase()
-    );
+    let category: AdhkarCategory | undefined;
+
+    if (!db.getStatus().connected) {
+      if (typeof categorySlugOrId === 'number') {
+        category = this.categoriesById.get(categorySlugOrId);
+      } else {
+        const num = Number(categorySlugOrId);
+        if (!isNaN(num) && this.categoriesById.has(num)) {
+          category = this.categoriesById.get(num);
+        } else {
+          category = this.categoriesBySlug.get(String(categorySlugOrId).toLowerCase());
+        }
+      }
+    }
+
+    if (!category) {
+      const categories = await this.getCategories();
+      category = categories.find((c) =>
+        typeof categorySlugOrId === 'number'
+          ? c.id === categorySlugOrId
+          : c.slug.toLowerCase() === String(categorySlugOrId).toLowerCase() || c.id === Number(categorySlugOrId)
+      );
+    }
 
     if (!category) {
       throw new Error(`Category not found: ${categorySlugOrId}`);
@@ -99,7 +169,7 @@ class AdhkarService {
     }
 
     if (items.length === 0) {
-      items = this.adhkar.filter((a) => a.category_id === category.id);
+      items = this.adhkarByCatId.get(category.id) || [];
     }
 
     const res = { category, items, total: items.length };
@@ -114,7 +184,7 @@ class AdhkarService {
 
   public async getDuas(category?: string): Promise<DuaItem[]> {
     if (category) {
-      return this.duas.filter((d) => d.category.toLowerCase() === category.toLowerCase());
+      return this.duasByCategory.get(category.toLowerCase()) || [];
     }
     return this.duas;
   }

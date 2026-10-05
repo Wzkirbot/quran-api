@@ -2,6 +2,7 @@ import { createApp } from './app.js';
 import { config } from './config/env.js';
 import { logger } from './utils/logger.js';
 import { db } from './database/connection.js';
+import { cache } from './cache/cache.service.js';
 
 const app = createApp();
 
@@ -10,10 +11,19 @@ const server = app.listen(config.port, config.host, () => {
   logger.info(`📖 Quran API Server is listening on http://${config.host}:${config.port}`);
   logger.info(`🚀 Environment: ${config.env}`);
   logger.info(`📚 Swagger Documentation: http://localhost:${config.port}/docs`);
-  logger.info(`🧪 API Playground: http://localhost:${config.port}/playground`);
-  logger.info(`📊 Health Status: http://localhost:${config.port}/status`);
   logger.info(`🛡️ Zero External Runtime Calls: VERIFIED & ACTIVE`);
   logger.info(`====================================================`);
+
+  // Non-blocking database availability probe
+  db.testConnection().then((connected) => {
+    if (connected) {
+      logger.info('Database (PostgreSQL): Connected successfully.');
+    } else {
+      logger.info('Database (PostgreSQL): Offline. Operating in In-Memory Authoritative mode.');
+    }
+  }).catch(() => {
+    logger.info('Database (PostgreSQL): Operating in In-Memory Authoritative mode.');
+  });
 });
 
 // Graceful Shutdown Handling
@@ -22,7 +32,8 @@ const shutdown = async (signal: string) => {
   server.close(async () => {
     logger.info('HTTP server closed.');
     await db.close();
-    logger.info('Database pool closed. Exiting process.');
+    await cache.close();
+    logger.info('Database and Cache resources closed cleanly. Exiting process.');
     process.exit(0);
   });
 

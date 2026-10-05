@@ -35,7 +35,6 @@ RUN npm ci --only=production && npm cache clean --force
 # Copy compiled files and required assets
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/data ./data
-COPY public/ ./public/
 COPY src/docs/ ./dist/docs/
 COPY src/database/schema.sql ./dist/database/schema.sql
 
