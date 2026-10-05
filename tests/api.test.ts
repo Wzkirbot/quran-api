@@ -153,8 +153,8 @@ describe('Quran API - Integration Test Suite', () => {
   });
 
   // 6. Qibla Calculation
-  describe('GET /v1/qibla', () => {
-    it('should calculate accurate Qibla for Jerusalem (~157.2°)', async () => {
+  describe('GET & POST /v1/qibla (GPS Coordinates)', () => {
+    it('should calculate accurate Qibla for Jerusalem (~157.2°) via GET', async () => {
       const res = await request(app).get('/v1/qibla?latitude=31.7683&longitude=35.2137');
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
@@ -162,24 +162,43 @@ describe('Quran API - Integration Test Suite', () => {
       expect(res.body.data.distance.km).toBeGreaterThan(1200);
     });
 
-    it('should calculate accurate Qibla for Cairo (~136°)', async () => {
-      const res = await request(app).get('/v1/qibla/city/cairo');
+    it('should calculate accurate Qibla via POST with JSON body', async () => {
+      const res = await request(app)
+        .post('/v1/qibla')
+        .send({ latitude: 30.0444, longitude: 31.2357 });
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
-      expect(res.body.data.qibla.direction).toBeGreaterThan(135);
-      expect(res.body.data.qibla.direction).toBeLessThan(138);
+      expect(res.body.data.direction).toBeGreaterThan(135);
+      expect(res.body.data.direction).toBeLessThan(138);
     });
 
-    it('should return major cities list for Qibla presets', async () => {
-      const res = await request(app).get('/v1/qibla/cities');
+    it('should support /api/qibla alias directly', async () => {
+      const res = await request(app).get('/api/qibla?latitude=31.7683&longitude=35.2137');
       expect(res.status).toBe(200);
-      expect(res.body.data.length).toBeGreaterThanOrEqual(15);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.direction).toBeCloseTo(157.19, 1);
     });
 
-    it('should return 400 when coordinates are missing', async () => {
+    it('should return LOCATION_REQUIRED (400) when coordinates are missing', async () => {
       const res = await request(app).get('/v1/qibla');
       expect(res.status).toBe(400);
-      expect(res.body.error.code).toBe('MISSING_COORDINATES');
+      expect(res.body.error.code).toBe('LOCATION_REQUIRED');
+    });
+
+    it('should return INVALID_LATITUDE (400) for out-of-range or NaN latitude', async () => {
+      const res1 = await request(app).get('/v1/qibla?latitude=100&longitude=35.2137');
+      expect(res1.status).toBe(400);
+      expect(res1.body.error.code).toBe('INVALID_LATITUDE');
+
+      const res2 = await request(app).get('/v1/qibla?latitude=abc&longitude=35.2137');
+      expect(res2.status).toBe(400);
+      expect(res2.body.error.code).toBe('INVALID_LATITUDE');
+    });
+
+    it('should return INVALID_LONGITUDE (400) for out-of-range or Infinity longitude', async () => {
+      const res = await request(app).get('/v1/qibla?latitude=31.7683&longitude=Infinity');
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('INVALID_LONGITUDE');
     });
   });
 

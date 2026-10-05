@@ -101,13 +101,17 @@ export function createApp(): Express {
         tafsir: '/v1/tafsir/ar.muyassar/1/1',
         translation: '/v1/translations/en.saheeh/1/1',
         adhkar: '/v1/adhkar',
-        duas: '/v1/duas'
+        duas: '/v1/duas',
+        reciters: '/v1/reciters',
+        qibla: '/v1/qibla?latitude={lat}&longitude={lng}'
       }
     });
   });
 
   // API Version 1 with Rate Limiter and Optional API Key Guard
   app.use('/v1', apiRateLimiter, apiKeyMiddleware, v1Router);
+  app.use('/api/v1', apiRateLimiter, apiKeyMiddleware, v1Router);
+  app.use('/api', apiRateLimiter, apiKeyMiddleware, v1Router);
 
   // 404 & Global Error Handlers
   app.use(notFoundHandler);

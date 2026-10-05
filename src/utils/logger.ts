@@ -4,7 +4,19 @@ import { config } from '../config/env.js';
 export const logger = pino({
   level: config.logger.level,
   redact: {
-    paths: ['req.headers.authorization', 'req.headers["x-api-key"]', 'password', 'token', 'secret'],
+    paths: [
+      'req.headers.authorization',
+      'req.headers["x-api-key"]',
+      'password',
+      'token',
+      'secret',
+      'req.query.latitude',
+      'req.query.longitude',
+      'req.query.lat',
+      'req.query.lng',
+      'req.body.latitude',
+      'req.body.longitude'
+    ],
     censor: '[REDACTED]'
   },
   transport: !config.isProduction
