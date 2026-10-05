@@ -3,6 +3,7 @@ import helmet from 'helmet';
 import cors from 'cors';
 import compression from 'compression';
 import path from 'node:path';
+import fs from 'node:fs';
 import swaggerUi from 'swagger-ui-express';
 import { pinoHttp } from 'pino-http';
 
@@ -74,9 +75,11 @@ export function createApp(): Express {
   // Swagger UI Interactive OpenAPI Documentation
   const openapiSpecPath = path.resolve(process.cwd(), 'src/docs/openapi.json');
   try {
-    const openapiSpec = require(openapiSpecPath);
-    app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, { customSiteTitle: 'Quran API Docs' }));
-    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, { customSiteTitle: 'Quran API Docs' }));
+    if (fs.existsSync(openapiSpecPath)) {
+      const openapiSpec = JSON.parse(fs.readFileSync(openapiSpecPath, 'utf-8'));
+      app.use('/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, { customSiteTitle: 'Quran API Docs' }));
+      app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(openapiSpec, { customSiteTitle: 'Quran API Docs' }));
+    }
   } catch (err: any) {
     logger.warn(`Could not load swagger documentation spec: ${err.message}`);
   }

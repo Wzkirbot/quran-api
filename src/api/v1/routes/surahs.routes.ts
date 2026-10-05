@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { quranService } from '../../../services/quran.service.js';
 import { sendSuccess, sendError } from '../../../utils/responseEnvelope.js';
+import { parseIntegerParam } from '../../../utils/validation.js';
 
 export const surahsRouter = Router();
 
@@ -17,8 +18,8 @@ surahsRouter.get('/', async (req: Request, res: Response, next: NextFunction) =>
 // GET /v1/surahs/:id - Get single Surah by ID (1-114)
 surahsRouter.get('/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id) || id < 1 || id > 114) {
+    const id = parseIntegerParam(req.params.id, { min: 1, max: 114 });
+    if (id === null) {
       sendError(req, res, 'INVALID_PARAMETER', 'Surah ID must be an integer between 1 and 114.', 400);
       return;
     }
@@ -38,14 +39,14 @@ surahsRouter.get('/:id', async (req: Request, res: Response, next: NextFunction)
 // GET /v1/surahs/:id/ayahs - Get Ayahs of a specific Surah with pagination
 surahsRouter.get('/:id/ayahs', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const id = parseInt(req.params.id, 10);
-    if (isNaN(id) || id < 1 || id > 114) {
+    const id = parseIntegerParam(req.params.id, { min: 1, max: 114 });
+    if (id === null) {
       sendError(req, res, 'INVALID_PARAMETER', 'Surah ID must be an integer between 1 and 114.', 400);
       return;
     }
 
-    const page = parseInt(req.query.page as string || '1', 10);
-    const limit = parseInt(req.query.limit as string || '50', 10);
+    const page = parseIntegerParam(req.query.page as string, { min: 1, defaultValue: 1 }) ?? 1;
+    const limit = parseIntegerParam(req.query.limit as string, { min: 1, defaultValue: 50 }) ?? 50;
 
     const result = await quranService.getSurahAyahs(id, page, limit);
     sendSuccess(req, res, result.ayahs, {
@@ -55,7 +56,7 @@ surahsRouter.get('/:id/ayahs', async (req: Request, res: Response, next: NextFun
       limit: result.limit,
       totalPages: Math.ceil(result.total / result.limit)
     });
-  } catch (err: any) {
+  } catch (err) {
     next(err);
   }
 });

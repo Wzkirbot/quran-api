@@ -15,7 +15,7 @@ adhkarRouter.get('/categories', async (req: Request, res: Response, next: NextFu
 });
 
 // GET /v1/adhkar/category/:slug - Get Adhkar of a specific category
-adhkarRouter.get('/category/:slug', async (req: Request, res: Response) => {
+adhkarRouter.get('/category/:slug', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const slug = req.params.slug.trim();
     const result = await adhkarService.getAdhkarByCategory(slug);
@@ -23,8 +23,12 @@ adhkarRouter.get('/category/:slug', async (req: Request, res: Response) => {
       category: result.category,
       total: result.total
     });
-  } catch (err: any) {
-    sendError(req, res, 'CATEGORY_NOT_FOUND', err.message, 404);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      sendError(req, res, 'CATEGORY_NOT_FOUND', err.message, 404);
+    } else {
+      next(err);
+    }
   }
 });
 

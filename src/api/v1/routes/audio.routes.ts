@@ -1,6 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { audioService } from '../../../services/audio.service.js';
 import { sendSuccess, sendError } from '../../../utils/responseEnvelope.js';
+import { parseIntegerParam } from '../../../utils/validation.js';
 
 export const audioRouter = Router();
 
@@ -15,7 +16,7 @@ audioRouter.get('/reciters', async (req: Request, res: Response, next: NextFunct
 });
 
 // GET /v1/reciters/:id - Get specific reciter info
-audioRouter.get('/reciters/:id', async (req: Request, res: Response) => {
+audioRouter.get('/reciters/:id', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const id = req.params.id.trim();
     const reciter = await audioService.getReciter(id);
@@ -24,18 +25,18 @@ audioRouter.get('/reciters/:id', async (req: Request, res: Response) => {
       return;
     }
     sendSuccess(req, res, reciter);
-  } catch (err: any) {
-    sendError(req, res, 'INTERNAL_ERROR', err.message, 500);
+  } catch (err) {
+    next(err);
   }
 });
 
 // GET /v1/audio/surah/:reciterId/:surahId - Audio track for full Surah
-audioRouter.get('/audio/surah/:reciterId/:surahId', async (req: Request, res: Response) => {
+audioRouter.get('/audio/surah/:reciterId/:surahId', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const reciterId = req.params.reciterId.trim();
-    const surahId = parseInt(req.params.surahId, 10);
+    const surahId = parseIntegerParam(req.params.surahId, { min: 1, max: 114 });
 
-    if (isNaN(surahId) || surahId < 1 || surahId > 114) {
+    if (surahId === null) {
       sendError(req, res, 'INVALID_SURAH_ID', 'Surah ID must be an integer between 1 and 114.', 400);
       return;
     }
@@ -47,13 +48,13 @@ audioRouter.get('/audio/surah/:reciterId/:surahId', async (req: Request, res: Re
     }
 
     sendSuccess(req, res, track);
-  } catch (err: any) {
-    sendError(req, res, 'INTERNAL_ERROR', err.message, 500);
+  } catch (err) {
+    next(err);
   }
 });
 
 // GET /v1/audio/ayah/:reciterId/:reference - Audio track for specific Ayah (e.g. 1:1 or 2:255)
-audioRouter.get(['/audio/ayah/:reciterId/:param1/:param2', '/audio/ayah/:reciterId/:param1'], async (req: Request, res: Response) => {
+audioRouter.get(['/audio/ayah/:reciterId/:param1/:param2', '/audio/ayah/:reciterId/:param1'], async (req: Request, res: Response, next: NextFunction) => {
   try {
     const reciterId = req.params.reciterId.trim();
     const { param1, param2 } = req.params;
@@ -85,7 +86,7 @@ audioRouter.get(['/audio/ayah/:reciterId/:param1/:param2', '/audio/ayah/:reciter
     }
 
     sendSuccess(req, res, track);
-  } catch (err: any) {
-    sendError(req, res, 'INTERNAL_ERROR', err.message, 500);
+  } catch (err) {
+    next(err);
   }
 });
