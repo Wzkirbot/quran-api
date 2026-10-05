@@ -1,0 +1,167 @@
+[
+  {
+    "id": "alafasy",
+    "name_ar": "مشاري بن راشد العفاسي",
+    "name_en": "Mishary Rashid Alafasy",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Alafasy_128kbps",
+    "surah_url_template": "https://server8.mp3quran.net/afs/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Alafasy_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "abdulbasit",
+    "name_ar": "عبد الباسط عبد الصمد (مرتل)",
+    "name_en": "Abdul Basit Abdul Samad (Murattal)",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "192kbps",
+    "subfolder": "Abdul_Basit_Murattal_192kbps",
+    "surah_url_template": "https://server7.mp3quran.net/basit/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Abdul_Basit_Murattal_192kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "abdulbasit_mujawwad",
+    "name_ar": "عبد الباسط عبد الصمد (مجود)",
+    "name_en": "Abdul Basit Abdul Samad (Mujawwad)",
+    "style": "mujawwad",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Abdul_Basit_Mujawwad_128kbps",
+    "surah_url_template": "https://server7.mp3quran.net/basit_mjwd/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Abdul_Basit_Mujawwad_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "husary",
+    "name_ar": "محمود خليل الحصري",
+    "name_en": "Mahmoud Khalil Al-Husary",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Husary_128kbps",
+    "surah_url_template": "https://server13.mp3quran.net/husr/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Husary_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "minshawi",
+    "name_ar": "محمد صديق المنشاوي (مرتل)",
+    "name_en": "Mohamed Siddiq El-Minshawi (Murattal)",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Minshawy_Murattal_128kbps",
+    "surah_url_template": "https://server10.mp3quran.net/minsh/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Minshawy_Murattal_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "minshawi_mujawwad",
+    "name_ar": "محمد صديق المنشاوي (مجود)",
+    "name_en": "Mohamed Siddiq El-Minshawi (Mujawwad)",
+    "style": "mujawwad",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "192kbps",
+    "subfolder": "Minshawy_Mujawwad_192kbps",
+    "surah_url_template": "https://server10.mp3quran.net/minsh_mjwd/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Minshawy_Mujawwad_192kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "ghamadi",
+    "name_ar": "سعد الغامدي",
+    "name_en": "Saad Al-Ghamdi",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Ghamadi_40kbps",
+    "surah_url_template": "https://server7.mp3quran.net/s_gmd/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Ghamadi_40kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "muaiqly",
+    "name_ar": "ماهر المعيقلي",
+    "name_en": "Maher Al-Muaiqly",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Maher_AlMuaiqly_64kbps",
+    "surah_url_template": "https://server12.mp3quran.net/maher/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Maher_AlMuaiqly_64kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "shatri",
+    "name_ar": "أبو بكر الشاطري",
+    "name_en": "Abu Bakr Al-Shatri",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Abu_Bakr_Ash-Shaatree_128kbps",
+    "surah_url_template": "https://server11.mp3quran.net/shatri/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Abu_Bakr_Ash-Shaatree_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "sudais",
+    "name_ar": "عبد الرحمن السديس",
+    "name_en": "Abdul Rahman Al-Sudais",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "192kbps",
+    "subfolder": "Abdurrahmaan_As-Sudais_192kbps",
+    "surah_url_template": "https://server11.mp3quran.net/sds/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Abdurrahmaan_As-Sudais_192kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "shuraim",
+    "name_ar": "سعود الشريم",
+    "name_en": "Saud Al-Shuraim",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Saood_ash-Shuraym_128kbps",
+    "surah_url_template": "https://server7.mp3quran.net/shur/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Saood_ash-Shuraym_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "dussary",
+    "name_ar": "ياسر الدوسري",
+    "name_en": "Yasser Al-Dosari",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Yasser_Ad-Dussary_128kbps",
+    "surah_url_template": "https://server11.mp3quran.net/yasser/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Yasser_Ad-Dussary_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "hudhaify",
+    "name_ar": "علي بن عبد الرحمن الحذيفي",
+    "name_en": "Ali Al-Hudhaify",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Hudhaify_128kbps",
+    "surah_url_template": "https://server9.mp3quran.net/hthfi/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Hudhaify_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "qatami",
+    "name_ar": "ناصر القطامي",
+    "name_en": "Nasser Al-Qatami",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Nasser_Alqatami_128kbps",
+    "surah_url_template": "https://server6.mp3quran.net/qtm/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Nasser_Alqatami_128kbps/{surah3}{ayah3}.mp3"
+  },
+  {
+    "id": "ajamy",
+    "name_ar": "أحمد بن علي العجمي",
+    "name_en": "Ahmed Al-Ajamy",
+    "style": "murattal",
+    "riwayah": "حفص عن عاصم",
+    "bitrate": "128kbps",
+    "subfolder": "Ahmed_ibn_Ali_al-Ajamy_128kbps_QuranExplorer.Com",
+    "surah_url_template": "https://server10.mp3quran.net/ajm/{surah3}.mp3",
+    "ayah_url_template": "https://everyayah.com/data/Ahmed_ibn_Ali_al-Ajamy_128kbps_QuranExplorer.Com/{surah3}{ayah3}.mp3"
+  }
+]
