@@ -71,10 +71,6 @@ export function createApp(): Express {
     })
   );
 
-  // Serve Static Web Portal (Landing, Playground, Status)
-  const publicDir = path.resolve(process.cwd(), 'public');
-  app.use(express.static(publicDir));
-
   // Swagger UI Interactive OpenAPI Documentation
   const openapiSpecPath = path.resolve(process.cwd(), 'src/docs/openapi.json');
   try {
@@ -85,20 +81,33 @@ export function createApp(): Express {
     logger.warn(`Could not load swagger documentation spec: ${err.message}`);
   }
 
-  // System Health Endpoints at Root Level as well
+  // System Health Endpoints at Root Level
   app.use('/', systemRouter);
+
+  // Root Discovery Endpoint
+  app.get('/', (_req, res) => {
+    res.json({
+      name: 'Quran API',
+      version: '1.0.0',
+      description: 'Production-ready, offline-first, self-hosted Quran API',
+      documentation: '/docs',
+      health: '/health',
+      v1: {
+        surahs: '/v1/surahs',
+        ayah: '/v1/ayahs/1',
+        juz: '/v1/juz/1',
+        page: '/v1/pages/1',
+        search: '/v1/search?q=رحمة',
+        tafsir: '/v1/tafsir/ar.muyassar/1/1',
+        translation: '/v1/translations/en.saheeh/1/1',
+        adhkar: '/v1/adhkar',
+        duas: '/v1/duas'
+      }
+    });
+  });
 
   // API Version 1 with Rate Limiter and Optional API Key Guard
   app.use('/v1', apiRateLimiter, apiKeyMiddleware, v1Router);
-
-  // Web Portal Page Routes
-  app.get('/playground', (_req, res) => {
-    res.sendFile(path.join(publicDir, 'playground.html'));
-  });
-
-  app.get('/status', (_req, res) => {
-    res.sendFile(path.join(publicDir, 'status.html'));
-  });
 
   // 404 & Global Error Handlers
   app.use(notFoundHandler);
