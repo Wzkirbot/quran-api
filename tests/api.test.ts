@@ -152,7 +152,38 @@ describe('Quran API - Integration Test Suite', () => {
     });
   });
 
-  // 6. Security & Health Endpoints
+  // 6. Qibla Calculation
+  describe('GET /v1/qibla', () => {
+    it('should calculate accurate Qibla for Jerusalem (~157.2°)', async () => {
+      const res = await request(app).get('/v1/qibla?latitude=31.7683&longitude=35.2137');
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.direction).toBeCloseTo(157.19, 1);
+      expect(res.body.data.distance.km).toBeGreaterThan(1200);
+    });
+
+    it('should calculate accurate Qibla for Cairo (~136°)', async () => {
+      const res = await request(app).get('/v1/qibla/city/cairo');
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(res.body.data.qibla.direction).toBeGreaterThan(135);
+      expect(res.body.data.qibla.direction).toBeLessThan(138);
+    });
+
+    it('should return major cities list for Qibla presets', async () => {
+      const res = await request(app).get('/v1/qibla/cities');
+      expect(res.status).toBe(200);
+      expect(res.body.data.length).toBeGreaterThanOrEqual(15);
+    });
+
+    it('should return 400 when coordinates are missing', async () => {
+      const res = await request(app).get('/v1/qibla');
+      expect(res.status).toBe(400);
+      expect(res.body.error.code).toBe('MISSING_COORDINATES');
+    });
+  });
+
+  // 7. Security & Health Endpoints
   describe('Security & System', () => {
     it('should return 200 on /health', async () => {
       const res = await request(app).get('/health');
