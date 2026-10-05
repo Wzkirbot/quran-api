@@ -7,7 +7,6 @@ import { searchRouter } from './routes/search.routes.js';
 import { adhkarRouter } from './routes/adhkar.routes.js';
 import { tafsirRouter } from './routes/tafsir.routes.js';
 import { audioRouter } from './routes/audio.routes.js';
-import { qiblaRouter } from './routes/qibla.routes.js';
 import { systemRouter } from './routes/system.routes.js';
 
 export const v1Router = Router();
@@ -23,6 +22,5 @@ v1Router.use('/duas', (req, res, next) => {
   adhkarRouter(req, res, next);
 });
 v1Router.use('/', audioRouter);
-v1Router.use('/', qiblaRouter);
 v1Router.use('/', tafsirRouter);
 v1Router.use('/', systemRouter);

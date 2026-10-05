@@ -102,8 +102,7 @@ export function createApp(): Express {
         translation: '/v1/translations/en.saheeh/1/1',
         adhkar: '/v1/adhkar',
         duas: '/v1/duas',
-        reciters: '/v1/reciters',
-        qibla: '/v1/qibla?latitude={lat}&longitude={lng}'
+        reciters: '/v1/reciters'
       }
     });
   });
