@@ -10,7 +10,6 @@ const server = app.listen(config.port, config.host, () => {
   logger.info(`====================================================`);
   logger.info(`Quran API Server is listening on http://${config.host}:${config.port}`);
   logger.info(`Environment: ${config.env}`);
-  logger.info(`Swagger Documentation: http://localhost:${config.port}/docs`);
   logger.info(`Zero External Runtime Calls: VERIFIED & ACTIVE`);
   logger.info(`====================================================`);
 

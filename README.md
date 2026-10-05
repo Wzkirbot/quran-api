@@ -84,11 +84,10 @@ Most religious and Quranic APIs available today act as external proxies or cloud
   - Configurable Rate Limiting via `.env`.
   - Helmet security headers, CORS protection, and request ID tracking (`X-Request-Id`).
   - Parameterized queries to eliminate SQL injection.
-- **Interactive Developer Portal:**
-  - **Landing Page (`/`):** Modern dark mode showcase.
-  - **OpenAPI / Swagger UI (`/docs`):** Interactive API reference.
-  - **API Playground (`/playground`):** Test live local queries, inspect response latency, and generate cURL commands.
-  - **Status Dashboard (`/status`):** Real-time local health monitoring for API, Database, and Cache.
+- **API Endpoints:**
+  - High-performance endpoints for Surahs, Ayahs, Tafsir, Translations, Adhkar, and Duas.
+  - JSON metadata discovery endpoint at root (`/`).
+  - System Health and Readiness probes (`/health`, `/ready`).
 
 ---
 
@@ -110,9 +109,8 @@ docker compose up -d
 
 Once running, access:
 - **API Base:** `http://localhost:3000/v1`
-- **Interactive Playground:** `http://localhost:3000/playground`
-- **Swagger Documentation:** `http://localhost:3000/docs`
-- **System Status:** `http://localhost:3000/status`
+- **Root Discovery:** `http://localhost:3000/`
+- **Health Check:** `http://localhost:3000/health`
 
 ---
 
