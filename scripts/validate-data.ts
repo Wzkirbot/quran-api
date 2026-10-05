@@ -28,7 +28,7 @@ function verifyChecksum(dirPath: string, dataFileName: string): void {
 
 async function validate() {
   console.log('====================================================');
-  console.log('🔍 Quran API - Dataset Integrity Validation');
+  console.log('Quran API - Dataset Integrity Validation');
   console.log('====================================================');
 
   const errors: string[] = [];
@@ -193,11 +193,11 @@ async function validate() {
 
   console.log('====================================================');
   if (errors.length > 0) {
-    console.error('❌ Data Integrity Check FAILED with the following errors:');
+    console.error('Data Integrity Check FAILED with the following errors:');
     errors.forEach((err) => console.error(`  - ${err}`));
     process.exit(1);
   } else {
-    console.log('✨ DATASET INTEGRITY CHECK PASSED (100% Valid)');
+    console.log('DATASET INTEGRITY CHECK PASSED (100% Valid)');
     console.log('====================================================');
   }
 }

@@ -1,4 +1,4 @@
-# 📖 Quran API
+# Quran API
 
 <p align="center">
   <strong>Free, Open Source & Self-Hosted Quran REST API for Developers</strong><br>
@@ -16,7 +16,7 @@
 
 ---
 
-## 🌟 Overview: Why Quran API?
+## Overview: Why Quran API?
 
 Most religious and Quranic APIs available today act as external proxies or cloud services requiring API keys, payment tiers, or constant internet connectivity. If the external provider goes down, client applications break.
 
@@ -27,7 +27,7 @@ Most religious and Quranic APIs available today act as external proxies or cloud
 
 ---
 
-## 🏛️ System Architecture
+## System Architecture
 
 ```text
  ┌────────────────────────────────────────────────────────┐
@@ -64,27 +64,27 @@ Most religious and Quranic APIs available today act as external proxies or cloud
 
 ---
 
-## ⚡ Key Features
+## Key Features
 
-- **📖 Complete Holy Quran:**
+- **Complete Holy Quran:**
   - 114 Surahs with revelation order, Arabic/English names, and classification (Meccan/Medinan).
   - 6,236 Ayahs with verified Uthmani script and diacritic-stripped search text.
   - Section mapping: 30 Ajza' (الأجزاء) and 240 Ahzab quarters.
   - Page mapping: 604 standard pages of the Madinah Mushaf.
-- **🤲 Authentic Adhkar & Duas:**
+- **Authentic Adhkar & Duas:**
   - Hisn al-Muslim Remembrance categorized by time and occasion (Morning, Evening, Sleep, Prayer, etc.) with repeat counts, virtues, and authenticated Hadith references.
   - Quranic Rabbana prayers and Prophetic supplications.
-- **📚 Tafsir & Meanings:**
+- **Tafsir & Meanings:**
   - Al-Tafsir Al-Muyassar (مجمع الملك فهد).
   - Saheeh International English translation.
-- **🔍 Intelligent Arabic Search:**
+- **Intelligent Arabic Search:**
   - Fast normalized search converting diacritics, Alef forms, and Waw with dagger Alif (`الصلاة`, `الزكاة`, `الحياة`).
   - PostgreSQL GIN Trigram indexes for sub-millisecond query execution.
-- **🛡️ Enterprise Hardening:**
+- **Enterprise Hardening:**
   - Configurable Rate Limiting via `.env`.
   - Helmet security headers, CORS protection, and request ID tracking (`X-Request-Id`).
   - Parameterized queries to eliminate SQL injection.
-- **🧪 Interactive Developer Portal:**
+- **Interactive Developer Portal:**
   - **Landing Page (`/`):** Modern dark mode showcase.
   - **OpenAPI / Swagger UI (`/docs`):** Interactive API reference.
   - **API Playground (`/playground`):** Test live local queries, inspect response latency, and generate cURL commands.
@@ -92,7 +92,7 @@ Most religious and Quranic APIs available today act as external proxies or cloud
 
 ---
 
-## 🚀 Quick Start with Docker (Recommended)
+## Quick Start with Docker (Recommended)
 
 Start the complete stack (API + PostgreSQL + Redis) in 30 seconds:
 
@@ -116,7 +116,7 @@ Once running, access:
 
 ---
 
-## 💻 Local Development Setup
+## Local Development Setup
 
 Prerequisites: **Node.js v20+** and **npm v10+**.
 
@@ -139,7 +139,7 @@ npm run dev
 
 ---
 
-## 📡 REST API Reference (`/v1`)
+## REST API Reference (`/v1`)
 
 ### Response Envelope
 All API endpoints return a standardized JSON response:
@@ -195,7 +195,7 @@ All API endpoints return a standardized JSON response:
 
 ---
 
-## 🔒 Security & Performance Tuning
+## Security & Performance Tuning
 
 Configuration is centralized in `.env`:
 
@@ -220,7 +220,7 @@ CORS_ORIGIN=*
 
 ---
 
-## 📜 Dataset Provenance & Licensing
+## Dataset Provenance & Licensing
 
 All data in Quran API is verified, rigorously audited, and complies with open distribution terms:
 
@@ -234,7 +234,7 @@ For full attribution details and checksums, see [NOTICE.md](NOTICE.md).
 
 ---
 
-## 🤝 Contributing & Community
+## Contributing & Community
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) and adhere to our [Code of Conduct](CODE_OF_CONDUCT.md).
 
@@ -248,6 +248,6 @@ npm test
 
 ---
 
-## 📄 License
+## License
 
 The software code is licensed under the **[MIT License](LICENSE)**.

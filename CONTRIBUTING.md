@@ -4,7 +4,7 @@ Thank you for your interest in contributing to **Quran API**! This project is 10
 
 ---
 
-## 🏛️ Guiding Architectural Principle
+## Guiding Architectural Principle
 
 > **CRITICAL RULE:** This project is strictly **Self-Hosted & Offline-First**.  
 > **NO external Quran API calls are permitted during runtime.**  
@@ -12,7 +12,7 @@ Thank you for your interest in contributing to **Quran API**! This project is 10
 
 ---
 
-## 🛠️ Local Development Setup
+## Local Development Setup
 
 1. **Clone the repository:**
    ```bash
@@ -43,7 +43,7 @@ Thank you for your interest in contributing to **Quran API**! This project is 10
 
 ---
 
-## 📋 Pull Request Guidelines
+## Pull Request Guidelines
 
 1. Ensure all TypeScript types are strictly checked: `npm run typecheck`.
 2. Ensure all tests pass: `npm test`.

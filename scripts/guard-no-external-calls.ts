@@ -40,7 +40,7 @@ function scanDirectory(dir: string, fileList: string[] = []): string[] {
 
 export function runOfflineGuardrail(): boolean {
   console.log('====================================================');
-  console.log('🛡️  Quran API - Runtime Offline Guardrail Audit');
+  console.log('Quran API - Runtime Offline Guardrail Audit');
   console.log('====================================================');
 
   const srcDir = path.resolve(process.cwd(), 'src');
@@ -80,7 +80,7 @@ export function runOfflineGuardrail(): boolean {
   }
 
   if (violations.length > 0) {
-    console.error('❌ OFFLINE GUARDRAIL VIOLATIONS FOUND:');
+    console.error('OFFLINE GUARDRAIL VIOLATIONS FOUND:');
     violations.forEach((v) => {
       console.error(`  - [${v.file}:${v.line}] ${v.issue}`);
     });
