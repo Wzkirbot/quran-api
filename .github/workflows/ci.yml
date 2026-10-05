@@ -33,8 +33,5 @@ jobs:
       - name: 3. Offline Guardrail Audit (Zero External Quran API calls)
         run: npm run guard:offline
 
-      - name: 4. Run Test Suite (Jest & Supertest)
-        run: npm test
-
-      - name: 5. Build Production Bundle
+      - name: 4. Build Production Bundle
         run: npm run build

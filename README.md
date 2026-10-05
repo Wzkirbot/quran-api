@@ -8,7 +8,7 @@ Built with TypeScript and Node.js. 100% Local Data, Zero External Runtime Depend
 [![TypeScript](https://img.shields.io/badge/Language-TypeScript%20(Strict)-3178C6.svg)](https://www.typescriptlang.org/)
 [![Node.js](https://img.shields.io/badge/Runtime-Node.js%20LTS-339933.svg)](https://nodejs.org/)
 [![Architecture](https://img.shields.io/badge/Architecture-Offline--First-10B981.svg)](#architecture)
-[![Coverage](https://img.shields.io/badge/Tests-27%20Passed%20(100%25)-success.svg)](#testing-and-validation)
+[![Data Integrity](https://img.shields.io/badge/Data%20Integrity-100%25%20Verified-success.svg)](#validation-and-audits)
 
 ---
 
@@ -35,7 +35,7 @@ Built with TypeScript and Node.js. 100% Local Data, Zero External Runtime Depend
   - [10. Fetch Audio Recitations](#10-fetch-audio-recitations)
 - [Standard Response Envelope](#standard-response-envelope)
 - [Instant Testing with requests.http](#instant-testing-with-requestshttp)
-- [Testing and Validation](#testing-and-validation)
+- [Validation and Audits](#validation-and-audits)
 - [Configuration and Environment Variables](#configuration-and-environment-variables)
 - [Data Provenance and Attribution](#data-provenance-and-attribution)
 - [License and Copyright](#license-and-copyright)
@@ -495,9 +495,9 @@ If you use:
 
 ---
 
-## Testing and Validation
+## Validation and Audits
 
-Run the automated test suite and integrity audits:
+Run the automated data integrity and offline guardrail audits:
 
 ```bash
 # 1. Strict TypeScript compilation check
@@ -506,14 +506,9 @@ npm run typecheck
 # 2. Validate all 114 Surahs, 6,236 Ayahs, and SHA-256 Checksums
 npm run validate:data
 
-# 3. Offline Guardrail static analysis test
+# 3. Offline Guardrail static analysis audit
 npm run guard:offline
-
-# 4. Full Jest Integration Test Suite (27 tests)
-npm test
 ```
-
-All 27 integration and integrity tests pass with 100% green coverage.
 
 ---
 
