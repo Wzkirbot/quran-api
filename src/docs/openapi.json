@@ -1,0 +1,243 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Quran API",
+    "version": "1.0.0",
+    "description": "Free, Open Source & Self-Hosted Quran, Adhkar, and Islamic REST API for developers with Zero External Runtime Dependency.",
+    "license": {
+      "name": "MIT",
+      "url": "https://opensource.org/licenses/MIT"
+    },
+    "contact": {
+      "name": "Quran API Open Source Project",
+      "url": "https://github.com/USERNAME/quran-api"
+    }
+  },
+  "servers": [
+    {
+      "url": "/",
+      "description": "Current Server Host"
+    }
+  ],
+  "tags": [
+    { "name": "Surahs", "description": "114 Surahs of the Holy Quran" },
+    { "name": "Ayahs", "description": "Ayahs, References and Random verses" },
+    { "name": "Search", "description": "High-performance Arabic text search" },
+    { "name": "Juz & Pages", "description": "Quranic sections (Juz) and Madinah Mushaf Pages" },
+    { "name": "Adhkar & Duas", "description": "Hisn al-Muslim Remembrance and Supplications" },
+    { "name": "Tafsir & Translations", "description": "Al-Muyassar Tafsir and English Meanings" },
+    { "name": "System", "description": "Health, Readiness and Version probes" }
+  ],
+  "paths": {
+    "/v1/surahs": {
+      "get": {
+        "tags": ["Surahs"],
+        "summary": "List all 114 Surahs",
+        "description": "Returns a complete list of all 114 Surahs with Arabic name, English name, transliteration, revelation type, total ayahs, and revelation order.",
+        "responses": {
+          "200": { "description": "List of 114 Surahs" }
+        }
+      }
+    },
+    "/v1/surahs/{id}": {
+      "get": {
+        "tags": ["Surahs"],
+        "summary": "Get Surah by ID",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "minimum": 1, "maximum": 114 } }
+        ],
+        "responses": {
+          "200": { "description": "Surah details" },
+          "404": { "description": "Surah not found" }
+        }
+      }
+    },
+    "/v1/surahs/{id}/ayahs": {
+      "get": {
+        "tags": ["Surahs"],
+        "summary": "Get Ayahs of a Surah",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "minimum": 1, "maximum": 114 } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 50 } }
+        ],
+        "responses": {
+          "200": { "description": "Paginated list of Ayahs" }
+        }
+      }
+    },
+    "/v1/ayahs/random": {
+      "get": {
+        "tags": ["Ayahs"],
+        "summary": "Get a random Ayah",
+        "description": "Returns a random Ayah selected entirely from the local database.",
+        "responses": {
+          "200": { "description": "Random Ayah object" }
+        }
+      }
+    },
+    "/v1/ayahs/{reference}": {
+      "get": {
+        "tags": ["Ayahs"],
+        "summary": "Get Ayah by reference",
+        "description": "Look up an Ayah by surah:ayah reference (e.g. '2:255') or global ayah number (e.g. '262').",
+        "parameters": [
+          { "name": "reference", "in": "path", "required": true, "example": "2:255", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "Ayah object" },
+          "404": { "description": "Ayah not found" }
+        }
+      }
+    },
+    "/v1/search": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "Search Quran text",
+        "description": "Search in Arabic text using normalized diacritics removal with optional surah or juz filters.",
+        "parameters": [
+          { "name": "q", "in": "query", "required": true, "example": "الصلاة", "schema": { "type": "string" } },
+          { "name": "surah", "in": "query", "schema": { "type": "integer" } },
+          { "name": "juz", "in": "query", "schema": { "type": "integer" } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 20 } }
+        ],
+        "responses": {
+          "200": { "description": "Search results with pagination" }
+        }
+      }
+    },
+    "/v1/juz": {
+      "get": {
+        "tags": ["Juz & Pages"],
+        "summary": "List all 30 Juz",
+        "responses": {
+          "200": { "description": "List of all 30 Juz boundaries" }
+        }
+      }
+    },
+    "/v1/juz/{id}": {
+      "get": {
+        "tags": ["Juz & Pages"],
+        "summary": "Get Ayahs of a specific Juz",
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "minimum": 1, "maximum": 30 } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 50 } }
+        ],
+        "responses": {
+          "200": { "description": "Paginated list of Ayahs in Juz" }
+        }
+      }
+    },
+    "/v1/pages/{number}": {
+      "get": {
+        "tags": ["Juz & Pages"],
+        "summary": "Get Ayahs of a specific Madinah Mushaf Page (1-604)",
+        "parameters": [
+          { "name": "number", "in": "path", "required": true, "schema": { "type": "integer", "minimum": 1, "maximum": 604 } }
+        ],
+        "responses": {
+          "200": { "description": "List of Ayahs on page" }
+        }
+      }
+    },
+    "/v1/adhkar/categories": {
+      "get": {
+        "tags": ["Adhkar & Duas"],
+        "summary": "List Adhkar Categories",
+        "responses": {
+          "200": { "description": "List of categories (morning, evening, sleep, etc.)" }
+        }
+      }
+    },
+    "/v1/adhkar/category/{slug}": {
+      "get": {
+        "tags": ["Adhkar & Duas"],
+        "summary": "Get Adhkar by category slug",
+        "parameters": [
+          { "name": "slug", "in": "path", "required": true, "example": "morning", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": { "description": "List of Adhkar with repeat counts and virtues" }
+        }
+      }
+    },
+    "/v1/adhkar/random": {
+      "get": {
+        "tags": ["Adhkar & Duas"],
+        "summary": "Get a random Dhikr",
+        "responses": {
+          "200": { "description": "Random Dhikr item" }
+        }
+      }
+    },
+    "/v1/adhkar/duas": {
+      "get": {
+        "tags": ["Adhkar & Duas"],
+        "summary": "Get Quranic & Prophetic Duas",
+        "parameters": [
+          { "name": "category", "in": "query", "schema": { "type": "string", "enum": ["quranic", "prophetic"] } }
+        ],
+        "responses": {
+          "200": { "description": "List of Duas with exact references" }
+        }
+      }
+    },
+    "/v1/tafsir/{surah}/{ayah}": {
+      "get": {
+        "tags": ["Tafsir & Translations"],
+        "summary": "Get Tafsir of an Ayah",
+        "parameters": [
+          { "name": "surah", "in": "path", "required": true, "schema": { "type": "integer" } },
+          { "name": "ayah", "in": "path", "required": true, "schema": { "type": "integer" } },
+          { "name": "name", "in": "query", "schema": { "type": "string", "default": "muyassar" } }
+        ],
+        "responses": {
+          "200": { "description": "Tafsir content" }
+        }
+      }
+    },
+    "/v1/translations/{surah}/{ayah}": {
+      "get": {
+        "tags": ["Tafsir & Translations"],
+        "summary": "Get Translation of an Ayah",
+        "parameters": [
+          { "name": "surah", "in": "path", "required": true, "schema": { "type": "integer" } },
+          { "name": "ayah", "in": "path", "required": true, "schema": { "type": "integer" } },
+          { "name": "lang", "in": "query", "schema": { "type": "string", "default": "en" } }
+        ],
+        "responses": {
+          "200": { "description": "Translation content" }
+        }
+      }
+    },
+    "/health": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Health Liveness probe",
+        "responses": {
+          "200": { "description": "API status is ok" }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": ["System"],
+        "summary": "Readiness probe",
+        "responses": {
+          "200": { "description": "API, Database, and Cache readiness status" }
+        }
+      }
+    },
+    "/version": {
+      "get": {
+        "tags": ["System"],
+        "summary": "API and dataset version information",
+        "responses": {
+          "200": { "description": "Version and dataset manifests metadata" }
+        }
+      }
+    }
+  }
+}

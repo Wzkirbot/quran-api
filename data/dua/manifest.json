@@ -1,0 +1,10 @@
+{
+  "dataset": "quranic_and_prophetic_duas",
+  "version": "1.0.0",
+  "source": "The Holy Quran & Sahih Hadith Collections (Bukhari, Muslim, Tirmidhi)",
+  "license": "Public Domain / Free for Non-Commercial & Educational Distribution",
+  "recordsCount": 15,
+  "attribution": "Authentic Quranic Rabbana prayers and Prophetic supplications with exact references.",
+  "importedAt": "2026-10-05T16:28:37.384Z",
+  "checksum": "c77e5ce10a9a8df40d401a0800dd915584f52f9a2aa0b8be5d44e81b75fc47b7"
+}

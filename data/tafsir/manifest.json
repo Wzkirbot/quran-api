@@ -1,0 +1,10 @@
+{
+  "dataset": "tafsir_al_muyassar",
+  "version": "1.0.0",
+  "source": "King Fahd Glorious Quran Printing Complex (مجمع الملك فهد لطباعة المصحف الشريف)",
+  "license": "Educational / Non-Commercial Open Distribution",
+  "recordsCount": 23,
+  "attribution": "Al-Tafsir Al-Muyassar prepared by elite scholars and published by King Fahd Quran Complex.",
+  "importedAt": "2026-10-05T16:28:37.385Z",
+  "checksum": "2aa48de580734c44d85e85a6fa301cb6a780f8b23551da6947410cb8a6d32a80"
+}

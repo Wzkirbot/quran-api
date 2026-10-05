@@ -1,0 +1,65 @@
+[
+  {
+    "id": 1,
+    "slug": "morning",
+    "title_ar": "أذكار الصباح",
+    "title_en": "Morning Remembrance",
+    "description": "أذكار تقال بعد صلاة الفجر حتى طلوع الشمس"
+  },
+  {
+    "id": 2,
+    "slug": "evening",
+    "title_ar": "أذكار المساء",
+    "title_en": "Evening Remembrance",
+    "description": "أذكار تقال بعد صلاة العصر حتى غروب الشمس"
+  },
+  {
+    "id": 3,
+    "slug": "sleep",
+    "title_ar": "أذكار النوم",
+    "title_en": "Remembrance Before Sleeping",
+    "description": "الأدعية والأذكار الثابتة عند إرادة النوم"
+  },
+  {
+    "id": 4,
+    "slug": "waking",
+    "title_ar": "أذكار الاستيقاظ من النوم",
+    "title_en": "Remembrance Upon Waking Up",
+    "description": "ما يقوله المسلم عند استيقاظه"
+  },
+  {
+    "id": 5,
+    "slug": "after_prayer",
+    "title_ar": "الأذكار بعد السلام من الصلاة",
+    "title_en": "Remembrance After Obligatory Prayer",
+    "description": "الأذكار الواردة دبر كل صلاة مكتوبة"
+  },
+  {
+    "id": 6,
+    "slug": "mosque",
+    "title_ar": "أذكار المسجد",
+    "title_en": "Mosque Remembrance",
+    "description": "أذكار دخول المسجد والخروج منه والذهاب إليه"
+  },
+  {
+    "id": 7,
+    "slug": "food",
+    "title_ar": "أذكار الطعام والشراب والضيف",
+    "title_en": "Remembrance for Food & Drink",
+    "description": "أدعية ما قبل الطعام والانتهاء منه"
+  },
+  {
+    "id": 8,
+    "slug": "travel",
+    "title_ar": "أذكار وركوب الدابة والسفر",
+    "title_en": "Travel Remembrance",
+    "description": "دعاء السفر وركوب الدابة"
+  },
+  {
+    "id": 9,
+    "slug": "general",
+    "title_ar": "جوامع الدعاء والتسبيح والاستغفار",
+    "title_en": "Comprehensive Remembrance & Forgiveness",
+    "description": "أذكار مأثورة في فضل التسبيح والتهليل والاستغفار"
+  }
+]

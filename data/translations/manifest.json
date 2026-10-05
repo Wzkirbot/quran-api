@@ -1,0 +1,10 @@
+{
+  "dataset": "quran_translation_english_saheeh",
+  "version": "1.0.0",
+  "source": "Saheeh International English Translation",
+  "license": "Creative Commons Attribution-ShareAlike 4.0 International",
+  "recordsCount": 23,
+  "attribution": "English translation of the Quran meanings by Saheeh International.",
+  "importedAt": "2026-10-05T16:28:37.386Z",
+  "checksum": "db4d6c1bd6f7ebe09d6c5199d825f4dab6426d6fdd1d4a8af3bfecab000f522a"
+}

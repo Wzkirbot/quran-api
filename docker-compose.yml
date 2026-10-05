@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # 1. PostgreSQL Database Service
+  postgres:
+    image: postgres:16-alpine
+    container_name: quran_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-quran_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-quran_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-quran_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./src/database/schema.sql:/docker-entrypoint-initdb.d/01_schema.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-quran_user} -d ${POSTGRES_DB:-quran_db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - quran_network
+
+  # 2. Optional Redis Cache Service
+  redis:
+    image: redis:7-alpine
+    container_name: quran_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - quran_network
+
+  # 3. Quran REST API Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: quran_api
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      HOST: 0.0.0.0
+      DATABASE_URL: postgres://${POSTGRES_USER:-quran_user}:${POSTGRES_PASSWORD:-quran_pass}@postgres:5432/${POSTGRES_DB:-quran_db}
+      REDIS_URL: redis://redis:6379
+      RATE_LIMIT_WINDOW: 1m
+      RATE_LIMIT_MAX: 100
+      CORS_ORIGIN: "*"
+      LOG_LEVEL: info
+    ports:
+      - "3000:3000"
+    networks:
+      - quran_network
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  quran_network:
+    driver: bridge

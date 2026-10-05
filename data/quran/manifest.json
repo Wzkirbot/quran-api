@@ -1,0 +1,10 @@
+{
+  "dataset": "quran_uthmani_and_simple",
+  "version": "1.0.0",
+  "source": "Tanzil Project (tanzil.net) & King Fahd Glorious Quran Printing Complex",
+  "license": "Tanzil Quran Text License / Creative Commons Attribution 3.0",
+  "recordsCount": 6236,
+  "attribution": "Quran text based on the Tanzil Project verified text and King Fahd Complex Madinah Mushaf page boundaries.",
+  "importedAt": "2026-10-05T16:40:24.639Z",
+  "checksum": "e5e263dbefcead457e392beb3205516f32c18b0c764326df4f8d65cd017092ff"
+}

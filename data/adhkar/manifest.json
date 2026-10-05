@@ -1,0 +1,10 @@
+{
+  "dataset": "hisn_almuslim_adhkar",
+  "version": "1.0.0",
+  "source": "Hisn al-Muslim (Fortress of the Muslim) by Saeed bin Ali bin Wahf Al-Qahtani",
+  "license": "Public Domain / Free for Non-Commercial & Educational Distribution",
+  "recordsCount": 25,
+  "attribution": "Authentic Adhkar compiled from Hisn al-Muslim with verified references and hadith gradings.",
+  "importedAt": "2026-10-05T16:28:37.382Z",
+  "checksum": "63464606eda25c52fb338b5c8c27063893fbaa338cddf8f6f0d06f6776f9d180"
+}
